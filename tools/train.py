@@ -8,10 +8,11 @@ import os
 import time
 import torch
 import warnings
+os.environ["CUDA_VISIBLE_DEVICES"]="4,5,6,7"
 from mmcv import Config, DictAction
 from mmcv.runner import get_dist_info, init_dist
 from os import path as osp
-
+# os.environ["CUDA_VISIBLE_DEVICES"] = "5, 6, 7"
 from mmdet import __version__ as mmdet_version
 from mmdet3d import __version__ as mmdet3d_version
 from mmdet3d.apis import train_model
@@ -27,7 +28,9 @@ def parse_args():
     parser.add_argument('config', help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
-        '--resume-from', help='the checkpoint file to resume from')
+        '--resume-from', default="/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_12.pth",
+        help='the checkpoint file to resume from, pretrain:/datasets/cdd_data/bevpretrainModel/bevdet-r50.pth'
+             '/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_10.pth')
     parser.add_argument(
         '--no-validate',
         action='store_true',
@@ -111,9 +114,8 @@ def main():
         # update configs according to CLI args if args.work_dir is not None
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
-        # use config filename as default work_dir if cfg.work_dir is None
-        cfg.work_dir = osp.join('./work_dirs',
-                                osp.splitext(osp.basename(args.config))[0])
+        # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
+        cfg.work_dir = osp.join('./outputs', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
     if args.gpu_ids is not None:
@@ -184,6 +186,7 @@ def main():
     model.init_weights()
 
     logger.info(f'Model:\n{model}')
+    print("data path", cfg.data.train)
     datasets = [build_dataset(cfg.data.train)]
     if len(cfg.workflow) == 2:
         val_dataset = copy.deepcopy(cfg.data.val)

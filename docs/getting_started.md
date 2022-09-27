@@ -4,7 +4,8 @@ Modify from the official mmdet3d [getting_started.md](https://github.com/open-mm
 BEVDet is developed with the following version of modules.
 - Linux or macOS (Windows is not currently officially supported)
 - Python 3.7
-- PyTorch 1.9.0
+- ~~PyTorch 1.9.0~~
+- Pytorch 1.10.0
 - CUDA 11.3.1 
 - GCC 7.3.0
 - MMCV==1.3.13

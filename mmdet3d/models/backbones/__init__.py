@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from mmdet.models.backbones import SSDVGG, HRNet, ResNet, ResNetV1d, ResNeXt
+from mmdet.models.backbones import SSDVGG, HRNet, ResNet, ResNetV1d, ResNeXt, MobileNetV2
 from .multi_backbone import MultiBackbone
 from .nostem_regnet import NoStemRegNet
 from .pointnet2_sa_msg import PointNet2SAMSG

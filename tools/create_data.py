@@ -1,5 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import argparse
+import os.path
 from os import path as osp
 
 from tools.data_converter import indoor_converter as indoor
@@ -184,16 +185,16 @@ def waymo_data_prep(root_path,
 
 
 parser = argparse.ArgumentParser(description='Data converter arg parser')
-parser.add_argument('dataset', metavar='kitti', help='name of the dataset')
+parser.add_argument('--dataset', type=str, default='nuscenes', help='name of the dataset')
 parser.add_argument(
     '--root-path',
     type=str,
-    default='./data/kitti',
+    default='/datasets/cdd_data/nuScenes',
     help='specify the root path of dataset')
 parser.add_argument(
     '--version',
     type=str,
-    default='v1.0',
+    default='v1.0-mini',  # 先改成mini形式的数据集进行测试
     required=False,
     help='specify the dataset version, no need for kitti')
 parser.add_argument(
@@ -205,15 +206,18 @@ parser.add_argument(
 parser.add_argument(
     '--out-dir',
     type=str,
-    default='./data/kitti',
-    required='False',
+    default='/datasets/cdd_data/nuScenes',
+    required=False,
     help='name of info pkl')
-parser.add_argument('--extra-tag', type=str, default='kitti')
+parser.add_argument('--extra-tag', type=str, default='nuscenes')
 parser.add_argument(
     '--workers', type=int, default=4, help='number of threads to be used')
 args = parser.parse_args()
 
+
 if __name__ == '__main__':
+    print("main into")
+
     if args.dataset == 'kitti':
         kitti_data_prep(
             root_path=args.root_path,

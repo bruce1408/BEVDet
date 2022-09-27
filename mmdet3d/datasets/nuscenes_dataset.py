@@ -160,7 +160,6 @@ class NuScenesDataset(Custom3DDataset):
             )
 
         self.img_info_prototype = img_info_prototype
-
         self.speed_mode = speed_mode
         self.max_interval = max_interval
         self.min_interval = min_interval

@@ -11,7 +11,7 @@ from .. import builder
 
 def gen_dx_bx(xbound, ybound, zbound):
     dx = torch.Tensor([row[2] for row in [xbound, ybound, zbound]])
-    bx = torch.Tensor([row[0] + row[2]/2.0 for row in [xbound, ybound, zbound]])
+    bx = torch.Tensor([row[0] + row[2] / 2.0 for row in [xbound, ybound, zbound]])
     nx = torch.Tensor([(row[1] - row[0]) / row[2] for row in [xbound, ybound, zbound]])
     return dx, bx, nx
 
@@ -66,7 +66,7 @@ class ViewTransformerLiftSplatShoot(BaseModule):
                 'xbound': [-51.2, 51.2, 0.8],
                 'ybound': [-51.2, 51.2, 0.8],
                 'zbound': [-10.0, 10.0, 20.0],
-                'dbound': [1.0, 60.0, 1.0],}
+                'dbound': [1.0, 60.0, 1.0], }
         self.grid_config = grid_config
         dx, bx, nx = gen_dx_bx(self.grid_config['xbound'],
                                self.grid_config['ybound'],
@@ -118,18 +118,18 @@ class ViewTransformerLiftSplatShoot(BaseModule):
         # B x N x D x H x W x 3
         points = self.frustum - post_trans.view(B, N, 1, 1, 1, 3)
         if offset is not None:
-            _,D,H,W = offset.shape
-            points[:,:,:,:,:,2] = points[:,:,:,:,:,2]+offset.view(B,N,D,H,W)
+            _, D, H, W = offset.shape
+            points[:, :, :, :, :, 2] = points[:, :, :, :, :, 2] + offset.view(B, N, D, H, W)
         points = torch.inverse(post_rots).view(B, N, 1, 1, 1, 3, 3).matmul(points.unsqueeze(-1))
 
         # cam_to_ego
         points = torch.cat((points[:, :, :, :, :, :2] * points[:, :, :, :, :, 2:3],
                             points[:, :, :, :, :, 2:3]
                             ), 5)
-        if intrins.shape[3]==4: # for KITTI
-            shift = intrins[:,:,:3,3]
-            points  = points - shift.view(B,N,1,1,1,3,1)
-            intrins = intrins[:,:,:3,:3]
+        if intrins.shape[3] == 4:  # for KITTI
+            shift = intrins[:, :, :3, 3]
+            points = points - shift.view(B, N, 1, 1, 1, 3, 1)
+            intrins = intrins[:, :, :3, :3]
         combine = rots.matmul(torch.inverse(intrins))
         points = combine.view(B, N, 1, 1, 1, 3, 3).matmul(points).squeeze(-1)
         points += trans.view(B, N, 1, 1, 1, 3)
@@ -159,13 +159,13 @@ class ViewTransformerLiftSplatShoot(BaseModule):
         geom_feats = geom_feats[kept]
 
         if self.max_drop_point_rate > 0.0 and self.training:
-            drop_point_rate = torch.rand(1)*self.max_drop_point_rate
-            kept = torch.rand(x.shape[0])>drop_point_rate
+            drop_point_rate = torch.rand(1) * self.max_drop_point_rate
+            kept = torch.rand(x.shape[0]) > drop_point_rate
             x, geom_feats = x[kept], geom_feats[kept]
 
         if self.use_bev_pool:
             final = bev_pool(x, geom_feats, B, self.nx[2], self.nx[0],
-                                   self.nx[1])
+                             self.nx[1])
             final = final.transpose(dim0=-2, dim1=-1)
         else:
             # get tensors from the same voxel next to each other
@@ -258,6 +258,12 @@ class ViewTransformerLiftSplatShoot(BaseModule):
         x = x.view(B * N, C, H, W)
         x = self.depthnet(x)
         depth = self.get_depth_dist(x[:, :self.D])
+        # [48, 59, 16, 44]
+        # print('depth shape is: ', depth.shape)
+        # 添加修改的部分
+        depth_temp = torch.zeros_like(depth)
+        depth = torch.where(depth < 0.1, depth_temp, depth)
+
         img_feat = x[:, self.D:(self.D + self.numC_Trans)]
 
         # Lift
@@ -281,11 +287,11 @@ class SELikeModule(nn.Module):
         self.fc = nn.Sequential(
             nn.BatchNorm1d(intrinsic_channel),
             nn.Linear(intrinsic_channel, feat_channel),
-            nn.Sigmoid() )
+            nn.Sigmoid())
 
     def forward(self, x, cam_params):
         x = self.input_conv(x)
-        b,c,_,_ = x.shape
+        b, c, _, _ = x.shape
         y = self.fc(cam_params).view(b, c, 1, 1)
         return x * y.expand_as(x)
 
@@ -306,16 +312,16 @@ class ViewTransformerLSSBEVDepth(ViewTransformerLiftSplatShoot):
                                   kernel_size=1,
                                   padding=0)
         self.dcn = nn.Sequential(*[build_conv_layer(dict(type='DCNv2',
-                                                        deform_groups=1),
-                                                   extra_depth_net['num_channels'][0],
-                                                   extra_depth_net['num_channels'][0],
-                                                   kernel_size=3,
-                                                   stride=1,
-                                                   padding=1,
-                                                   dilation=1,
-                                                   **dcn_config),
+                                                         deform_groups=1),
+                                                    extra_depth_net['num_channels'][0],
+                                                    extra_depth_net['num_channels'][0],
+                                                    kernel_size=3,
+                                                    stride=1,
+                                                    padding=1,
+                                                    dilation=1,
+                                                    **dcn_config),
                                    nn.BatchNorm2d(extra_depth_net['num_channels'][0])
-                                  ])
+                                   ])
         self.se = SELikeModule(self.numC_input,
                                feat_channel=extra_depth_net['num_channels'][0],
                                **se_config)
@@ -327,16 +333,19 @@ class ViewTransformerLSSBEVDepth(ViewTransformerLiftSplatShoot):
 
         img_feat = self.featnet(x)
         depth_feat = x
-        cam_params = torch.cat([intrins.reshape(B*N,-1),
-                               post_rots.reshape(B*N,-1),
-                               post_trans.reshape(B*N,-1),
-                               rots.reshape(B*N,-1),
-                               trans.reshape(B*N,-1)],dim=1)
+        cam_params = torch.cat([intrins.reshape(B * N, -1),
+                                post_rots.reshape(B * N, -1),
+                                post_trans.reshape(B * N, -1),
+                                rots.reshape(B * N, -1),
+                                trans.reshape(B * N, -1)], dim=1)
         depth_feat = self.se(depth_feat, cam_params)
         depth_feat = self.extra_depthnet(depth_feat)[0]
         depth_feat = self.dcn(depth_feat)
         depth_digit = self.depthnet(depth_feat)
         depth_prob = self.get_depth_dist(depth_digit)
+        # 添加修改
+        depth_temp = torch.zeros_like(depth_prob)
+        depth_prob = torch.where(depth_prob < 0.1, depth_temp, depth_prob)
 
         # Lift
         volume = depth_prob.unsqueeze(1) * img_feat.unsqueeze(2)
