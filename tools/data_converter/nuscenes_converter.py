@@ -321,9 +321,9 @@ def obtain_sensor2top(nusc,
     l2e_r_s_mat = Quaternion(l2e_r_s).rotation_matrix
     e2g_r_s_mat = Quaternion(e2g_r_s).rotation_matrix
     R = (l2e_r_s_mat.T @ e2g_r_s_mat.T) @ (
-        np.linalg.inv(e2g_r_mat).T @ np.linalg.inv(l2e_r_mat).T)
+            np.linalg.inv(e2g_r_mat).T @ np.linalg.inv(l2e_r_mat).T)
     T = (l2e_t_s @ e2g_r_s_mat.T + e2g_t_s) @ (
-        np.linalg.inv(e2g_r_mat).T @ np.linalg.inv(l2e_r_mat).T)
+            np.linalg.inv(e2g_r_mat).T @ np.linalg.inv(l2e_r_mat).T)
     T -= e2g_t @ (np.linalg.inv(e2g_r_mat).T @ np.linalg.inv(l2e_r_mat).T
                   ) + l2e_t @ np.linalg.inv(l2e_r_mat).T
     sweep['sensor2lidar_rotation'] = R.T  # points @ R.T + T
@@ -416,8 +416,8 @@ def get_2d_boxes(nusc,
     sd_rec = nusc.get('sample_data', sample_data_token)
 
     assert sd_rec[
-        'sensor_modality'] == 'camera', 'Error: get_2d_boxes only works' \
-        ' for camera sample_data!'
+               'sensor_modality'] == 'camera', 'Error: get_2d_boxes only works' \
+                                               ' for camera sample_data!'
     if not sd_rec['is_key_frame']:
         raise ValueError(
             'The 2D re-projections are available only for keyframes.')
@@ -528,7 +528,7 @@ def get_2d_boxes(nusc,
 
 
 def post_process_coords(
-    corner_coords: List, imsize: Tuple[int, int] = (1600, 900)
+        corner_coords: List, imsize: Tuple[int, int] = (1600, 900)
 ) -> Union[Tuple[float, float, float, float], None]:
     """Get the intersection of the convex hull of the reprojected bbox corners
     and the image canvas, return None if no intersection.
@@ -622,3 +622,7 @@ def generate_record(ann_rec: dict, x1: float, y1: float, x2: float, y2: float,
     coco_rec['iscrowd'] = 0
 
     return coco_rec
+
+
+if __name__ == "__main__":
+    create_nuscenes_infos("/data/nuScenes")

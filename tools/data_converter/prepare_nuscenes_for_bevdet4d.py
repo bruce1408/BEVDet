@@ -2,6 +2,7 @@
 
 import pickle
 import json
+from tqdm import tqdm
 from nuscenes import NuScenes
 import numpy as np
 from pyquaternion import Quaternion
@@ -11,9 +12,10 @@ def add_adj_info():
     interval = 3
     max_adj = 60
     for set in ['train', 'val']:
-        dataset = pickle.load(open('./data/nuscenes/nuscenes_infos_%s.pkl' % set, 'rb'))
+        # dataset = pickle.load(open('./data/nuscenes/nuscenes_infos_%s.pkl' % set, 'rb'))
+        dataset = pickle.load(open('/data/nuScenes/nuscenes_infos_temporal_%s.pkl' % set, 'rb'))
         nuscenes_version = 'v1.0-trainval'
-        dataroot = './data/nuscenes/'
+        dataroot = '/data/nuScenes/'
         nuscenes = NuScenes(nuscenes_version, dataroot)
         map_token_to_id = dict()
         for id in range(len(dataset['infos'])):
