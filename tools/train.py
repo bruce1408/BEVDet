@@ -12,7 +12,6 @@ os.environ["CUDA_VISIBLE_DEVICES"]="4,5,6,7"
 from mmcv import Config, DictAction
 from mmcv.runner import get_dist_info, init_dist
 from os import path as osp
-# os.environ["CUDA_VISIBLE_DEVICES"] = "5, 6, 7"
 from mmdet import __version__ as mmdet_version
 from mmdet3d import __version__ as mmdet3d_version
 from mmdet3d.apis import train_model
