@@ -42,19 +42,19 @@ numC_Trans = 64
 model = dict(
     type='BEVDet',
     img_backbone=dict(
-        pretrained='/datasets/cdd_data/resnet50-0676ba61.pth',
-        type='ResNet',
-        depth=50,
-        num_stages=4,
-        out_indices=(2, 3),
+        pretrained='open-mmlab://mmdet/mobilenet_v2',
+        type='MobileNetV2',
+        # depth=50,
+        # num_stages=4,
+        out_indices=(4, 6),
         frozen_stages=-1,
-        norm_cfg=dict(type='BN', requires_grad=True),
-        norm_eval=False,
-        with_cp=True,
-        style='pytorch'),
+        # norm_cfg=dict(type='BN', requires_grad=True),
+        # norm_eval=False,
+        # with_cp=True),
+    ),
     img_neck=dict(
         type='FPNForBEVDet',
-        in_channels=[1024, 2048],
+        in_channels=[96, 320],
         out_channels=512,
         num_outs=1,
         start_level=0,
@@ -127,11 +127,10 @@ model = dict(
             nms_thr=[0.2, 0.2, 0.2, 0.2, 0.2, 0.5],
             nms_rescale_factor=[1.0, [0.7, 0.7], [0.4, 0.55], 1.1, [1.0, 1.0], [4.5, 9.0]]
         )))
-print(model.get("img_backbone").get("type"))
-print(model.get("train_cfg"))
-print(model.get("test_cfg"))
 
-
+# print(model.get("img_backbone").get("type"))
+# print(model.get("train_cfg"))
+# print(model.get("test_cfg"))
 # Data
 dataset_type = 'NuScenesDataset'
 data_root = '/datasets/cdd_data/nuScenes/'
@@ -245,4 +244,5 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=0.001,
     step=[16, 22])
-runner = dict(type='EpochBasedRunner', max_epochs=24)
+runner = dict(type='EpochBasedRunner', max_epochs=50)
+# find_unused_parameters = True  # 是否查找模型中未使用的参数
