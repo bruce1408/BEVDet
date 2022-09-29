@@ -105,6 +105,8 @@ class ViewTransformerLiftSplatShoot(BaseModule):
 
         # D x H x W x 3
         frustum = torch.stack((xs, ys, ds), -1)
+        # 视锥的D深度是41
+        # print('frustum shape: ', frustum.shape)
         return nn.Parameter(frustum, requires_grad=False)
 
     def get_geometry(self, rots, trans, intrins, post_rots, post_trans, offset=None):
@@ -139,13 +141,16 @@ class ViewTransformerLiftSplatShoot(BaseModule):
 
     def voxel_pooling(self, geom_feats, x):
         B, N, D, H, W, C = x.shape
+        # print("="*12, B, N, D, H, W, C)
         Nprime = B * N * D * H * W
+        # print('Nprime is: ', Nprime)
         nx = self.nx.to(torch.long)
         # flatten x
         x = x.reshape(Nprime, C)
 
         # flatten indices
         geom_feats = ((geom_feats - (self.bx - self.dx / 2.)) / self.dx).long()
+        # print('geom_feats shape is: ', geom_feats.shape)
         geom_feats = geom_feats.view(Nprime, 3)
         batch_ix = torch.cat([torch.full([Nprime // B, 1], ix,
                                          device=x.device, dtype=torch.long) for ix in range(B)])
@@ -256,7 +261,11 @@ class ViewTransformerLiftSplatShoot(BaseModule):
         x, rots, trans, intrins, post_rots, post_trans = input
         B, N, C, H, W = x.shape
         x = x.view(B * N, C, H, W)
+
+        # 这里x的输入是B*N, C=512,通过深度的depthnet一层1x1卷积之后，输出通道是105
         x = self.depthnet(x)
+        # x这里是B*N,105, H, W
+
         depth = self.get_depth_dist(x[:, :self.D])
         # [48, 59, 16, 44]
         # print('depth shape is: ', depth.shape)

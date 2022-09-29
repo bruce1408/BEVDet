@@ -8,7 +8,7 @@ import os
 import time
 import torch
 import warnings
-os.environ["CUDA_VISIBLE_DEVICES"]="4,5,6,7"
+# os.environ["CUDA_VISIBLE_DEVICES"]="4,5,6,7"
 from mmcv import Config, DictAction
 from mmcv.runner import get_dist_info, init_dist
 from os import path as osp
@@ -26,10 +26,11 @@ from mmseg import __version__ as mmseg_version
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
     parser.add_argument('config', help='train config file path')
+    # parser.add_argument('--config', default="../configs/bevdet/bevdet_mobilenetv2.py", help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
-        '--resume-from', default="/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_12.pth",
-        help='the checkpoint file to resume from, pretrain:/datasets/cdd_data/bevpretrainModel/bevdet-r50.pth'
+        '--resume-from', default="",
+        help='the checkpoint file to resume from'
              '/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_10.pth')
     parser.add_argument(
         '--no-validate',
@@ -98,6 +99,7 @@ def main():
     args = parse_args()
 
     cfg = Config.fromfile(args.config)
+    print(cfg)
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
     # import modules from string list.
@@ -115,7 +117,7 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
-        cfg.work_dir = osp.join('./outputs', osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./outputs_efficientNet', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
     if args.gpu_ids is not None:
@@ -186,7 +188,7 @@ def main():
     model.init_weights()
 
     logger.info(f'Model:\n{model}')
-    # print("data path", cfg.data.train)
+    print("data path", cfg.data.train)
     datasets = [build_dataset(cfg.data.train)]
     if len(cfg.workflow) == 2:
         val_dataset = copy.deepcopy(cfg.data.val)

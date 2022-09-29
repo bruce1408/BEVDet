@@ -42,19 +42,19 @@ numC_Trans = 64
 model = dict(
     type='BEVDet',
     img_backbone=dict(
-        pretrained='open-mmlab://mmdet/mobilenet_v2',
+        pretrained='/datasets/cdd_data/mobilenet_v2_batch256_imagenet-ff34753d.pth',
         type='MobileNetV2',
-        # depth=50,
-        # num_stages=4,
-        out_indices=(4, 6),
+        act_cfg=dict(type='LeakyReLU', negative_slope=0.1),
+        # out_indices=(4, 6),
+        out_indices=(4, 7),
         frozen_stages=-1,
-        # norm_cfg=dict(type='BN', requires_grad=True),
+        norm_cfg=dict(type='BN', requires_grad=True),
         # norm_eval=False,
         # with_cp=True),
     ),
     img_neck=dict(
         type='FPNForBEVDet',
-        in_channels=[96, 320],
+        in_channels=[96, 1280],
         out_channels=512,
         num_outs=1,
         start_level=0,
@@ -213,7 +213,7 @@ input_modality = dict(
     use_external=False)
 
 data = dict(
-    samples_per_gpu=8,
+    samples_per_gpu=6,  # 这里为了快速收敛，设置为6
     workers_per_gpu=4,
     train=dict(
         type='CBGSDataset',

@@ -29,9 +29,9 @@ def parse_args():
     # parser.add_argument('--config', default="../configs/bevdet/bevdet_mobilenetv2.py", help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
-        '--resume-from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2/bevdet_mobilenetv2/epoch_25.pth",
+        '--resume-from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2/epoch_11.pth",
         help='the checkpoint file to resume from'
-             '/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_10.pth')
+             '/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2')
     parser.add_argument(
         '--no-validate',
         action='store_true',
@@ -48,7 +48,8 @@ def parse_args():
         nargs='+',
         help='ids of gpus to use '
         '(only applicable to non-distributed training)')
-    parser.add_argument('--seed', type=int, default=0, help='random seed')
+    # 3407这个随机种子据说可以提高1-2个点，神奇！
+    parser.add_argument('--seed', type=int, default=3407, help='random seed')
     parser.add_argument(
         '--deterministic',
         action='store_true',
@@ -117,7 +118,7 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
-        cfg.work_dir = osp.join('./outputs_mobilenetv2', osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./outputs_mobilenetv2_1', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
     if args.gpu_ids is not None:

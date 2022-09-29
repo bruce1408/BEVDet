@@ -8,7 +8,6 @@ _base_ = ['../_base_/datasets/nus-3d.py',
 # cloud range accordingly
 point_cloud_range = [-51.2, -51.2, -5.0, 51.2, 51.2, 3.0]
 # For nuScenes we usually do 10-class detection
-# 原来是23各类别，这里做了处理，就是人具体只有一类行人，
 class_names = [
     'car', 'truck', 'construction_vehicle', 'bus', 'trailer', 'barrier',
     'motorcycle', 'bicycle', 'pedestrian', 'traffic_cone'
@@ -22,40 +21,72 @@ data_config = {
     'src_size': (900, 1600),
 
     # Augmentation
-    'resize': (-0.06, 0.11),  # resize的范围
-    'rot': (-5.4, 5.4),  # 训练时旋转图片的角度范围
-    'flip': True,  # # 是否随机翻转
+    'resize': (-0.06, 0.11),
+    'rot': (-5.4, 5.4),
+    'flip': True,
     'crop_h': (0.0, 0.0),
     'resize_test': 0.04,
 }
 
 # Model
 grid_config = {
-    'xbound': [-51.2, 51.2, 0.8],   # 限制x方向的范围并划分网格
-    'ybound': [-51.2, 51.2, 0.8],   # 限制y方向的范围并划分网格
-    'zbound': [-10.0, 10.0, 20.0],  # 限制z方向的范围并划分网格
-    'dbound': [1.0, 60.0, 1.0], }   # 限制深度方向的范围并划分网格
+    'xbound': [-51.2, 51.2, 0.8],
+    'ybound': [-51.2, 51.2, 0.8],
+    'zbound': [-10.0, 10.0, 20.0],
+    'dbound': [1.0, 60.0, 1.0], }
 
 voxel_size = [0.1, 0.1, 0.2]
 
 numC_Trans = 64
 
+# model = dict(
+#     backbone=dict(
+#         _delete_=True,
+#         type='EfficientNet',
+#         arch='b3',
+#         drop_path_rate=0.2,
+#         out_indices=(3, 4, 5),
+#         frozen_stages=0,  # which means not freezing any parameters.
+#         norm_cfg=dict(
+#             type='SyncBN', requires_grad=True, eps=1e-3, momentum=0.01),
+#         norm_eval=False,
+#         init_cfg=dict(
+#             type='Pretrained', prefix='backbone', checkpoint=checkpoint)),
+#     # neck=dict(
+#     #     in_channels=[48, 136, 384],
+#     #     start_level=0,
+#     #     out_channels=256,
+#     #     relu_before_extra_convs=True,
+#     #     no_norm_on_lateral=True,
+#     #     norm_cfg=norm_cfg),
+#     bbox_head=dict(type='RetinaSepBNHead', num_ins=5, norm_cfg=norm_cfg),
+#     # training and testing settings
+#     train_cfg=dict(assigner=dict(neg_iou_thr=0.5)))
+
+checkpoint = '/datasets/cdd_data/efficientnet-b3_3rdparty_8xb32-aa_in1k_20220119-5b4887a0.pth'  # noqa
 model = dict(
     type='BEVDet',
     img_backbone=dict(
-        pretrained='/datasets/cdd_data/resnet50-0676ba61.pth',
-        type='ResNet',
-        depth=50,
-        num_stages=4,
-        out_indices=(2, 3),
-        frozen_stages=-1,
-        norm_cfg=dict(type='BN', requires_grad=True),
-        norm_eval=False,
-        with_cp=True,
-        style='pytorch'),
+        # pretrained='/datasets/cdd_data/efficientnet-b3_3rdparty_8xb32-aa_in1k_20220119-5b4887a0.pth',
+        type='EfficientNet',
+        arch='b3',
+        # depth=50,
+        # num_stages=4,
+        # drop_path_rate=0.2,
+        frozen_stages=0,
+        norm_cfg=dict(
+            type='SyncBN', requires_grad=True, eps=1e-3, momentum=0.01),
+        out_indices=(4, 6),
+        init_cfg=dict(
+            type='Pretrained', prefix='backbone', checkpoint=checkpoint)
+        # frozen_stages=-1,
+        # norm_cfg=dict(type='BN', requires_grad=True),
+        # norm_eval=False,
+        # with_cp=True),
+    ),
     img_neck=dict(
         type='FPNForBEVDet',
-        in_channels=[1024, 2048],
+        in_channels=[136, 1536],  # 一共是0-7 8层
         out_channels=512,
         num_outs=1,
         start_level=0,
@@ -128,11 +159,10 @@ model = dict(
             nms_thr=[0.2, 0.2, 0.2, 0.2, 0.2, 0.5],
             nms_rescale_factor=[1.0, [0.7, 0.7], [0.4, 0.55], 1.1, [1.0, 1.0], [4.5, 9.0]]
         )))
-print(model.get("img_backbone").get("type"))
+
+# print(model.get("img_backbone").get("type"))
 # print(model.get("train_cfg"))
 # print(model.get("test_cfg"))
-
-
 # Data
 dataset_type = 'NuScenesDataset'
 data_root = '/datasets/cdd_data/nuScenes/'
@@ -207,7 +237,6 @@ eval_pipeline = [
     dict(type='Collect3D', keys=['img_inputs'])
 ]
 
-# 输入图片，不用雷达数据
 input_modality = dict(
     use_lidar=False,
     use_camera=True,
@@ -215,9 +244,8 @@ input_modality = dict(
     use_map=False,
     use_external=False)
 
-# 数据配置文件
 data = dict(
-    samples_per_gpu=8,
+    samples_per_gpu=4,  # 这里是设置每个gpu上面的batch-size
     workers_per_gpu=4,
     train=dict(
         type='CBGSDataset',
@@ -248,4 +276,5 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=0.001,
     step=[16, 22])
-runner = dict(type='EpochBasedRunner', max_epochs=24)
+runner = dict(type='EpochBasedRunner', max_epochs=50)
+# find_unused_parameters = True  # 是否查找模型中未使用的参数
