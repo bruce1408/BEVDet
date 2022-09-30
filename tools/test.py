@@ -21,7 +21,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='MMDet test (and eval) a model')
     parser.add_argument('config', help='test config file path')
-    parser.add_argument('checkpoint', default="/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_24.pth",
+    parser.add_argument('checkpoint', default="",
                         help='checkpoint file')
     parser.add_argument('--out', help='output result file in pickle format')
     parser.add_argument(

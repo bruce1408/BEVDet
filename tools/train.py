@@ -28,7 +28,7 @@ def parse_args():
     parser.add_argument('config', help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
-        '--resume-from', default="/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_12.pth",
+        '--resume-from', default="",
         help='the checkpoint file to resume from, pretrain:/datasets/cdd_data/bevpretrainModel/bevdet-r50.pth'
              '/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_10.pth')
     parser.add_argument(
@@ -126,6 +126,7 @@ def main():
     if args.autoscale_lr:
         # apply the linear scaling rule (https://arxiv.org/abs/1706.02677)
         cfg.optimizer['lr'] = cfg.optimizer['lr'] * len(cfg.gpu_ids) / 8
+        print("cfg.optimizer['lr']", cfg.optimizer['lr'])
 
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':

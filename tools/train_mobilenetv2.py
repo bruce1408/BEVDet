@@ -29,7 +29,14 @@ def parse_args():
     # parser.add_argument('--config', default="../configs/bevdet/bevdet_mobilenetv2.py", help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
-        '--resume-from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2/epoch_11.pth",
+        '--resume-from',
+        # default="/datasets/cdd_data/lr_change_mobilenetv2.pth",
+        # '--resume-from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2/epoch_37.pth",
+        help='the checkpoint file to resume from'
+             '/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2')
+    parser.add_argument(
+        '--load_from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_2/bevdet_mobilenetv2/epoch_8.pth",
+        # '--resume-from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2/epoch_37.pth",
         help='the checkpoint file to resume from'
              '/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2')
     parser.add_argument(
@@ -78,8 +85,9 @@ def parse_args():
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
     parser.add_argument(
-        '--autoscale-lr',
+        '--autoscale_lr',
         action='store_true',
+        # default=True,
         help='automatically scale lr with the number of gpus')
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
@@ -118,9 +126,12 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
-        cfg.work_dir = osp.join('./outputs_mobilenetv2_1', osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./outputs_mobilenetv2_3', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
+    if args.load_from is not None:
+        cfg.load_from = args.load_from
+        print("load model .........")
     if args.gpu_ids is not None:
         cfg.gpu_ids = args.gpu_ids
     else:
@@ -128,7 +139,9 @@ def main():
 
     if args.autoscale_lr:
         # apply the linear scaling rule (https://arxiv.org/abs/1706.02677)
-        cfg.optimizer['lr'] = cfg.optimizer['lr'] * len(cfg.gpu_ids) / 8
+        # cfg.optimizer['lr'] = cfg.optimizer['lr'] * len(cfg.gpu_ids) / 8
+        cfg.optimizer['lr'] = 2e-5
+        print("cfg.optimizer['lr']", cfg.optimizer['lr'])
 
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':
