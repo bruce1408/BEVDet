@@ -32,6 +32,8 @@ def parse_args():
         '--resume-from', default="",
         help='the checkpoint file to resume from'
              '/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_10.pth')
+    parser.add_argument('--load_from', default="/home/cuidongdong/BEVDet/outputs_efficientNet/bevdet-efficientNet/epoch_29.pth",
+                        help='laod checkpoints from saved models')
     parser.add_argument(
         '--no-validate',
         action='store_true',
@@ -117,9 +119,12 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
-        cfg.work_dir = osp.join('./outputs_efficientNet', osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./outputs_efficientNet_1', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
+    if args.load_from is not None:
+        cfg.load_from = args.load_from
+        print("load model .........")
     if args.gpu_ids is not None:
         cfg.gpu_ids = args.gpu_ids
     else:

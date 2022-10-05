@@ -268,13 +268,13 @@ data = dict(
               modality=input_modality, img_info_prototype='bevdet'))
 
 # Optimizer
-optimizer = dict(type='AdamW', lr=2e-4, weight_decay=0.01)
+optimizer = dict(type='AdamW', lr=2e-5, weight_decay=0.01)
 optimizer_config = dict(grad_clip=None)
 lr_config = dict(
     policy='step',
     warmup='linear',
     warmup_iters=500,
     warmup_ratio=0.001,
-    step=[16, 22])
+    step=[40, 45])
 runner = dict(type='EpochBasedRunner', max_epochs=50)
 # find_unused_parameters = True  # 是否查找模型中未使用的参数

@@ -45,6 +45,7 @@ model = dict(
         pretrained='/datasets/cdd_data/mobilenet_v2_batch256_imagenet-ff34753d.pth',
         type='MobileNetV2',
         act_cfg=dict(type='LeakyReLU', negative_slope=0.1),
+        # act_cfg=dict(type='Swish'),
         # out_indices=(4, 6),
         out_indices=(4, 7),
         frozen_stages=-1,
@@ -213,7 +214,7 @@ input_modality = dict(
     use_external=False)
 
 data = dict(
-    samples_per_gpu=8,  # 这里为了快速收敛，设置为6
+    samples_per_gpu=4,  # 这里为了快速收敛，设置为6
     workers_per_gpu=4,
     train=dict(
         type='CBGSDataset',
@@ -236,14 +237,16 @@ data = dict(
               modality=input_modality, img_info_prototype='bevdet'))
 
 # Optimizer
-optimizer = dict(type='AdamW', lr=1.597e-6, weight_decay=0.01, amsgrad=True)
+# optimizer = dict(type='AdamW', lr=2e-6, weight_decay=0.01, amsgrad=True)
+optimizer = dict(type='AdamW', lr=2e-5, weight_decay=0.0001, amsgrad=True)
+# optimizer = dict(type='RMSprop', lr=2e-6, alpha=0.9, weight_decay=0.01, momentum=0.9)
 optimizer_config = dict(grad_clip=None)
 lr_config = dict(
     policy='step',
-    # warmup='linear',
-    # warmup_iters=500,
-    # warmup_ratio=0.001,
-    step=[45]
+    warmup='linear',
+    warmup_iters=500,
+    warmup_ratio=0.001,
+    step=[5]
     # step=[16, 22, 40, 45]
 )
 runner = dict(type='EpochBasedRunner', max_epochs=50)

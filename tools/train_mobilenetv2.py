@@ -37,8 +37,7 @@ def parse_args():
     parser.add_argument(
         '--load_from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_2/bevdet_mobilenetv2/epoch_8.pth",
         # '--resume-from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2/epoch_37.pth",
-        help='the checkpoint file to resume from'
-             '/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2')
+        help='the checkpoint file to resume from')
     parser.add_argument(
         '--no-validate',
         action='store_true',
@@ -126,7 +125,7 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
-        cfg.work_dir = osp.join('./outputs_mobilenetv2_3', osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./outputs_mobilenetv2_4', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
     if args.load_from is not None:
