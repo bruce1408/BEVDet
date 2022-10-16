@@ -150,7 +150,7 @@ class ViewTransformerLiftSplatShoot(BaseModule):
 
         # flatten indices
         geom_feats = ((geom_feats - (self.bx - self.dx / 2.)) / self.dx).long()
-        # print('geom_feats shape is: ', geom_feats.shape)
+        print('geom_feats shape is: ', geom_feats.shape)
         geom_feats = geom_feats.view(Nprime, 3)
         batch_ix = torch.cat([torch.full([Nprime // B, 1], ix,
                                          device=x.device, dtype=torch.long) for ix in range(B)])

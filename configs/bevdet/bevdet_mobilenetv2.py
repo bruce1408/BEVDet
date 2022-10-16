@@ -17,7 +17,9 @@ data_config = {
     'cams': ['CAM_FRONT_LEFT', 'CAM_FRONT', 'CAM_FRONT_RIGHT',
              'CAM_BACK_LEFT', 'CAM_BACK', 'CAM_BACK_RIGHT'],
     'Ncams': 6,
-    'input_size': (256, 704),
+    # 'input_size': (256, 704),
+    # 'input_size': (288, 792),  # 1.14倍
+    'input_size': (304, 848),  # 1.14倍
     'src_size': (900, 1600),
 
     # Augmentation
@@ -214,7 +216,7 @@ input_modality = dict(
     use_external=False)
 
 data = dict(
-    samples_per_gpu=4,  # 这里为了快速收敛，设置为6
+    samples_per_gpu=8,  # 这里为了快速收敛，设置为6
     workers_per_gpu=4,
     train=dict(
         type='CBGSDataset',
@@ -238,7 +240,7 @@ data = dict(
 
 # Optimizer
 # optimizer = dict(type='AdamW', lr=2e-6, weight_decay=0.01, amsgrad=True)
-optimizer = dict(type='AdamW', lr=2e-5, weight_decay=0.0001, amsgrad=True)
+optimizer = dict(type='AdamW', lr=4e-6, weight_decay=0.01)
 # optimizer = dict(type='RMSprop', lr=2e-6, alpha=0.9, weight_decay=0.01, momentum=0.9)
 optimizer_config = dict(grad_clip=None)
 lr_config = dict(
@@ -246,8 +248,8 @@ lr_config = dict(
     warmup='linear',
     warmup_iters=500,
     warmup_ratio=0.001,
-    step=[5]
+    step=[38, 50, 70]
     # step=[16, 22, 40, 45]
 )
-runner = dict(type='EpochBasedRunner', max_epochs=50)
+runner = dict(type='EpochBasedRunner', max_epochs=100)
 # find_unused_parameters = True  # 是否查找模型中未使用的参数

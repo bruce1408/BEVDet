@@ -44,10 +44,10 @@ model = dict(
     type='BEVDet',
     img_backbone=dict(
         # pretrained='/datasets/cdd_data/resnet50-0676ba61.pth',
-        pretrained='/datasets/cdd_data/resnet101-63fe2227.pth',
+        # pretrained='/datasets/cdd_data/resnet101-63fe2227.pth',
         type='ResNet',
-        # depth=50,
-        depth=101,
+        depth=50,
+        # depth=101,
         num_stages=4,
         out_indices=(2, 3),
         frozen_stages=-1,
@@ -249,5 +249,13 @@ lr_config = dict(
     warmup='linear',
     warmup_iters=500,
     warmup_ratio=0.001,
-    step=[5, 22])
+    step=[16, 22])
+# optimizer = dict(type='AdamW', lr=3.04e-7, weight_decay=0.01)
+# optimizer_config = dict(grad_clip=None)
+# lr_config = dict(
+#     policy='step',
+#     warmup='linear',
+#     warmup_iters=500,
+#     warmup_ratio=0.001,
+#     step=[8, 15])
 runner = dict(type='EpochBasedRunner', max_epochs=24)

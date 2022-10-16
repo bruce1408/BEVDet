@@ -31,7 +31,11 @@ def parse_args():
         '--resume-from', default="",
         help='the checkpoint file to resume from, pretrain:/datasets/cdd_data/bevpretrainModel/bevdet-r50.pth'
              '/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_10.pth')
+    parser.add_argument('--load_from',
+                        default="/home/cuidongdong/BEVDet/outputs_resnet50_1/bevdet-r50/epoch_2.pth",
+                        help='laod checkpoints from saved models')
     parser.add_argument(
+        '--no-validate',
         '--no-validate',
         action='store_true',
         help='whether not to evaluate the checkpoint during training')
@@ -47,7 +51,7 @@ def parse_args():
         nargs='+',
         help='ids of gpus to use '
         '(only applicable to non-distributed training)')
-    parser.add_argument('--seed', type=int, default=0, help='random seed')
+    parser.add_argument('--seed', type=int, default=3407, help='random seed')
     parser.add_argument(
         '--deterministic',
         action='store_true',
@@ -115,9 +119,12 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
-        cfg.work_dir = osp.join('./outputs_resnet101', osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./outputs_resnet50_1', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
+    if args.load_from is not None:
+        cfg.load_from = args.load_from
+        print("load model .........")
     if args.gpu_ids is not None:
         cfg.gpu_ids = args.gpu_ids
     else:

@@ -31,12 +31,12 @@ def parse_args():
     parser.add_argument(
         '--resume-from',
         # default="/datasets/cdd_data/lr_change_mobilenetv2.pth",
-        # '--resume-from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2/epoch_37.pth",
+        '--resume-from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_5/bevdet_mobilenetv2/epoch_55.pth",
         help='the checkpoint file to resume from'
              '/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2')
     parser.add_argument(
-        '--load_from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_2/bevdet_mobilenetv2/epoch_8.pth",
-        # '--resume-from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_1/bevdet_mobilenetv2/epoch_37.pth",
+        '--load_from', default="",
+        # '--resume-from', default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_2/bevdet_mobilenetv2/epoch_8.pth",
         help='the checkpoint file to resume from')
     parser.add_argument(
         '--no-validate',
@@ -55,7 +55,7 @@ def parse_args():
         help='ids of gpus to use '
         '(only applicable to non-distributed training)')
     # 3407这个随机种子据说可以提高1-2个点，神奇！
-    parser.add_argument('--seed', type=int, default=3407, help='random seed')
+    parser.add_argument('--seed', type=int, default=0, help='random seed')
     parser.add_argument(
         '--deterministic',
         action='store_true',
@@ -125,7 +125,7 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
-        cfg.work_dir = osp.join('./outputs_mobilenetv2_4', osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./outputs_mobilenetv2_5', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
     if args.load_from is not None:
@@ -136,11 +136,11 @@ def main():
     else:
         cfg.gpu_ids = range(1) if args.gpus is None else range(args.gpus)
 
-    if args.autoscale_lr:
-        # apply the linear scaling rule (https://arxiv.org/abs/1706.02677)
-        # cfg.optimizer['lr'] = cfg.optimizer['lr'] * len(cfg.gpu_ids) / 8
-        cfg.optimizer['lr'] = 2e-5
-        print("cfg.optimizer['lr']", cfg.optimizer['lr'])
+    # if args.autoscale_lr:
+    #     # apply the linear scaling rule (https://arxiv.org/abs/1706.02677)
+    #     cfg.optimizer['lr'] = cfg.optimizer['lr'] * len(cfg.gpu_ids) / 8
+    #     # cfg.optimizer['lr'] = 2e-5
+    #     print("cfg.optimizer['lr']", cfg.optimizer['lr'])
 
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':

@@ -131,7 +131,7 @@ class NuScenesDataset(Custom3DDataset):
                  min_interval=0,
                  prev_only=False,
                  next_only=False,
-                 test_adj = 'prev',
+                 test_adj='prev',
                  fix_direction=False,
                  test_adj_ids=None):
         self.load_interval = load_interval
@@ -246,7 +246,7 @@ class NuScenesDataset(Custom3DDataset):
                     # obtain lidar to image transformation matrix
                     lidar2cam_r = np.linalg.inv(cam_info['sensor2lidar_rotation'])
                     lidar2cam_t = cam_info[
-                        'sensor2lidar_translation'] @ lidar2cam_r.T
+                                      'sensor2lidar_translation'] @ lidar2cam_r.T
                     lidar2cam_rt = np.eye(4)
                     lidar2cam_rt[:3, :3] = lidar2cam_r.T
                     lidar2cam_rt[3, :3] = -lidar2cam_t
@@ -264,8 +264,8 @@ class NuScenesDataset(Custom3DDataset):
             elif self.img_info_prototype == 'bevdet':
                 input_dict.update(dict(img_info=info['cams']))
             elif self.img_info_prototype == 'bevdet_sequential':
-                if info ['prev'] is None or info['next'] is None:
-                    adjacent= 'prev' if info['next'] is None else 'next'
+                if info['prev'] is None or info['next'] is None:
+                    adjacent = 'prev' if info['next'] is None else 'next'
                 else:
                     if self.prev_only or self.next_only:
                         adjacent = 'prev' if self.prev_only else 'next'
@@ -276,22 +276,22 @@ class NuScenesDataset(Custom3DDataset):
                 if type(info[adjacent]) is list:
                     if self.test_mode:
                         if self.test_adj_ids is not None:
-                            info_adj=[]
+                            info_adj = []
                             select_id = self.test_adj_ids
                             for id_tmp in select_id:
-                                id_tmp = min(id_tmp, len(info[adjacent])-1)
+                                id_tmp = min(id_tmp, len(info[adjacent]) - 1)
                                 info_adj.append(info[adjacent][id_tmp])
                         else:
-                            select_id = min((self.max_interval+self.min_interval)//2,
-                                            len(info[adjacent])-1)
+                            select_id = min((self.max_interval + self.min_interval) // 2,
+                                            len(info[adjacent]) - 1)
                             info_adj = info[adjacent][select_id]
                     else:
-                        if len(info[adjacent])<= self.min_interval:
-                            select_id = len(info[adjacent])-1
+                        if len(info[adjacent]) <= self.min_interval:
+                            select_id = len(info[adjacent]) - 1
                         else:
                             select_id = np.random.choice([adj_id for adj_id in range(
-                                min(self.min_interval,len(info[adjacent])),
-                                min(self.max_interval,len(info[adjacent])))])
+                                min(self.min_interval, len(info[adjacent])),
+                                min(self.max_interval, len(info[adjacent])))])
                         info_adj = info[adjacent][select_id]
                 else:
                     info_adj = info[adjacent]
@@ -306,7 +306,7 @@ class NuScenesDataset(Custom3DDataset):
             if self.img_info_prototype == 'bevdet_sequential':
                 bbox = input_dict['ann_info']['gt_bboxes_3d'].tensor
                 if 'abs' in self.speed_mode:
-                    bbox[:, 7:9] = bbox[:, 7:9] + torch.from_numpy(info['velo']).view(1,2).to(bbox)
+                    bbox[:, 7:9] = bbox[:, 7:9] + torch.from_numpy(info['velo']).view(1, 2).to(bbox)
                 if input_dict['adjacent_type'] == 'next' and not self.fix_direction:
                     bbox[:, 7:9] = -bbox[:, 7:9]
                 if 'dis' in self.speed_mode:
@@ -396,13 +396,13 @@ class NuScenesDataset(Custom3DDataset):
                                              self.eval_version)
             for i, box in enumerate(boxes):
                 name = mapped_class_names[box.label]
-                if np.sqrt(box.velocity[0]**2 + box.velocity[1]**2) > 0.2:
+                if np.sqrt(box.velocity[0] ** 2 + box.velocity[1] ** 2) > 0.2:
                     if name in [
-                            'car',
-                            'construction_vehicle',
-                            'bus',
-                            'truck',
-                            'trailer',
+                        'car',
+                        'construction_vehicle',
+                        'bus',
+                        'truck',
+                        'trailer',
                     ]:
                         attr = 'vehicle.moving'
                     elif name in ['bicycle', 'motorcycle']:
@@ -669,7 +669,7 @@ def output_to_nusc_box(detection, info, speed_mode,
     box_yaw = -box_yaw - np.pi / 2
 
     velocity_all = box3d.tensor[:, 7:9]
-    if img_info_prototype =='bevdet_sequential':
+    if img_info_prototype == 'bevdet_sequential':
         if info['prev'] is None or info['next'] is None:
             adjacent = 'prev' if info['next'] is None else 'next'
         else:
@@ -689,7 +689,7 @@ def output_to_nusc_box(detection, info, speed_mode,
     box_list = []
     for i in range(len(box3d)):
         quat = pyquaternion.Quaternion(axis=[0, 0, 1], radians=box_yaw[i])
-        velocity = (*velocity_all[i,:], 0.0)
+        velocity = (*velocity_all[i, :], 0.0)
         # velo_val = np.linalg.norm(box3d[i, 7:9])
         # velo_ori = box3d[i, 6]
         # velocity = (
