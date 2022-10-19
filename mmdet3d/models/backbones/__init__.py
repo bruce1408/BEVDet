@@ -7,9 +7,10 @@ from .pointnet2_sa_ssg import PointNet2SASSG
 from .second import SECOND
 from .resnet import ResNetForBEVDet
 from .swin import SwinTransformer
+from .inception_tiny import InceptionForBEV  # 新加的inception网络
 
 __all__ = [
     'ResNet', 'ResNetV1d', 'ResNeXt', 'SSDVGG', 'HRNet', 'NoStemRegNet',
     'SECOND', 'PointNet2SASSG', 'PointNet2SAMSG', 'MultiBackbone',
-    'ResNetForBEVDet', 'SwinTransformer'
+    'ResNetForBEVDet', 'SwinTransformer', 'InceptionForBEV'
 ]
