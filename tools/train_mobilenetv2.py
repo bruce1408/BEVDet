@@ -29,7 +29,6 @@ def parse_args():
     parser.add_argument(
         '--resume-from',
         # default="/datasets/cdd_data/lr_change_mobilenetv2.pth",
-        '--resume-from',
         default="",
         help='the checkpoint file to resume from'
              '/home/cuidongdong/BEVDet/outputs_mobilenetv2_5/bevdet_mobilenetv2/epoch_55.pth')
