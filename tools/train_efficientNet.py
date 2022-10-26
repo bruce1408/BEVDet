@@ -26,7 +26,7 @@ from mmseg import __version__ as mmseg_version
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
     parser.add_argument('config', help='train config file path')
-    # parser.add_argument('--config', default="../configs/bevdet/bevdet_mobilenetv2.py", help='train config file path')
+    # parser.add_argument('--config', default="../configs/bevdet/bevdet_mobilenetv2_inception.py", help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume-from', default="",

@@ -40,7 +40,7 @@ grid_config = {
 voxel_size = [0.1, 0.1, 0.2]
 
 numC_Trans = 64
-inception_out_channel = [numC_Trans, numC_Trans*2, numC_Trans*4, numC_Trans*8]
+
 model = dict(
     type='BEVDet',
     img_backbone=dict(
@@ -66,7 +66,7 @@ model = dict(
                               grid_config=grid_config,
                               data_config=data_config,
                               numC_Trans=numC_Trans),
-    img_bev_encoder_backbone=dict(type='InceptionForBEV', in_channel=numC_Trans, out_channel=inception_out_channel),
+    img_bev_encoder_backbone=dict(type='ResNetForBEVDet', numC_input=numC_Trans),
     img_bev_encoder_neck=dict(type='FPN_LSS',
                               in_channels=numC_Trans * 8 + numC_Trans * 2,
                               out_channels=256),
@@ -248,8 +248,8 @@ lr_config = dict(
     warmup='linear',
     warmup_iters=500,
     warmup_ratio=0.001,
-    gamma=0.9,
-    step=[16, 51, 73]
+    gamma=0.8,
+    step=[16, 50, 55, 56, 57, 58, 59, 60]
     # step=[16, 22, 40, 45]
 )
 runner = dict(type='EpochBasedRunner', max_epochs=100)
