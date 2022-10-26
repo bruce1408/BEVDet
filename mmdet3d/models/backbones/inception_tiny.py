@@ -43,10 +43,10 @@ class InceptionForBEV(nn.Module):
         pool = self.maxpoolConv(out5)
         # out = torch.cat([out1, out3, out5, pool], dim=1)
         output.extend([out3, out5, pool])
-        print(outputs.__len__())
-        print(outputs[0].shape)
-        print(outputs[1].shape)
-        print(outputs[2].shape)
+        print(output.__len__())
+        print(output[0].shape)
+        print(output[1].shape)
+        print(output[2].shape)
 
         return output
 
