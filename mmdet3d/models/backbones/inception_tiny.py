@@ -43,20 +43,25 @@ class InceptionForBEV(nn.Module):
         pool = self.maxpoolConv(out5)
         # out = torch.cat([out1, out3, out5, pool], dim=1)
         output.extend([out3, out5, pool])
+        print(outputs.__len__())
+        print(outputs[0].shape)
+        print(outputs[1].shape)
+        print(outputs[2].shape)
+
         return output
 
 
-# if __name__ == '__main__':
-#     # net = Inception_v1()
-#     # if torch.cuda.is_available():
-#     #     summary(net.cuda(), (3, 224, 224))
-#     # else:
-#     #     summary(net, (3, 224, 224))
-#
-#     inputs = torch.randn(1, 64, 224, 224)
-#     net = InceptionForBEV(64, [64, 128, 256, 512])
-#     outputs = net(inputs)
-#     print(outputs.__len__())
-#     print(outputs[0].shape)
-#     print(outputs[1].shape)
-#     print(outputs[2].shape)
+if __name__ == '__main__':
+    # net = Inception_v1()
+    # if torch.cuda.is_available():
+    #     summary(net.cuda(), (3, 224, 224))
+    # else:
+    #     summary(net, (3, 224, 224))
+
+    inputs = torch.randn(1, 64, 224, 224)
+    net = InceptionForBEV(64, [64, 128, 256, 512])
+    outputs = net(inputs)
+    print(outputs.__len__())
+    print(outputs[0].shape)
+    print(outputs[1].shape)
+    print(outputs[2].shape)
