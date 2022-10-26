@@ -12,7 +12,7 @@ class InceptionForBEV(nn.Module):
     def __init__(self, in_channel, out_channel, stride=2):
         super(InceptionForBEV, self).__init__()
         # 1*1 conv
-        self.conv1 = nn.Conv2d(in_channel, out_channel[0], 1, 1)
+        # self.conv1 = nn.Conv2d(in_channel, out_channel[0], 1, 1)
         # 1*1 3*3 conv
         self.conv3 = nn.Sequential(
             nn.Conv2d(in_channel, out_channel[1], 1, 1),

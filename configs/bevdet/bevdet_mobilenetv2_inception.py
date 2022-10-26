@@ -253,4 +253,4 @@ lr_config = dict(
     # step=[16, 22, 40, 45]
 )
 runner = dict(type='EpochBasedRunner', max_epochs=100)
-# find_unused_parameters = True  # 是否查找模型中未使用的参数
+find_unused_parameters = True  # 是否查找模型中未使用的参数
