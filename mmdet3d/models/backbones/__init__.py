@@ -8,6 +8,7 @@ from .second import SECOND
 from .resnet import ResNetForBEVDet
 from .swin import SwinTransformer
 from .inception_tiny import InceptionForBEV  # 新加的inception网络
+# from torchvision.models.vgg import vgg11_bn
 
 __all__ = [
     'ResNet', 'ResNetV1d', 'ResNeXt', 'SSDVGG', 'HRNet', 'NoStemRegNet',

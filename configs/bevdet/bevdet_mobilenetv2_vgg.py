@@ -66,7 +66,7 @@ model = dict(
                               grid_config=grid_config,
                               data_config=data_config,
                               numC_Trans=numC_Trans),
-    img_bev_encoder_backbone=dict(type='ResNetForBEVDet', numC_input=numC_Trans),
+    img_bev_encoder_backbone=dict(type='VGGForBEVDet', numC_input=numC_Trans),
     img_bev_encoder_neck=dict(type='FPN_LSS',
                               in_channels=numC_Trans * 8 + numC_Trans * 2,
                               out_channels=256),
