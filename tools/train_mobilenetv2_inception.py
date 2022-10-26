@@ -120,7 +120,7 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
-        cfg.work_dir = osp.join('./outputs_mobilenetv2_inception', osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./outputs_mobilenetv2_inception_1', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
     if args.load_from is not None:
