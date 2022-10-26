@@ -29,24 +29,26 @@ class InceptionForBEV(nn.Module):
             nn.Conv2d(out_channel[2], out_channel[3], 1, stride, 1)
         )
 
-        self.bn1 = nn.BatchNorm2d(out_channel[0])
-        self.bn2 = nn.BatchNorm2d(out_channel[1])
+        self.bn1 = nn.BatchNorm2d(out_channel[1])
+        self.bn2 = nn.BatchNorm2d(out_channel[2])
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, input):
         output = []
         out3 = self.conv3(input)
-        out3 = self.bn2(out3)
+        out3 = self.bn1(out3)
         out3 = self.relu(out3)
 
         out5 = self.conv5(out3)
+        out5 = self.bn2(out5)
+        out5 = self.relu(out5)
         pool = self.maxpoolConv(out5)
         # out = torch.cat([out1, out3, out5, pool], dim=1)
         output.extend([out3, out5, pool])
-        print(output.__len__())
-        print(output[0].shape)
-        print(output[1].shape)
-        print(output[2].shape)
+        # print(output.__len__())
+        # print(output[0].shape)
+        # print(output[1].shape)
+        # print(output[2].shape)
 
         return output
 
