@@ -28,7 +28,7 @@ def parse_args():
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume-from',
-        default="",
+        default="/home/cuidongdong/BEVDet/outputs_mobilenetv2_inception_1/bevdet_mobilenetv2_inception/epoch_22.pth",
         help='the checkpoint file to resume from')
     parser.add_argument(
         '--load_from', default="",
