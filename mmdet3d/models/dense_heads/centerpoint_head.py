@@ -462,7 +462,7 @@ class CenterHead(BaseModule):
         pc_range = torch.tensor(self.train_cfg['point_cloud_range'])
         voxel_size = torch.tensor(self.train_cfg['voxel_size'])
 
-        # feature_map_size = grid_size[:2] // self.train_cfg['out_size_factor']
+        # feature_map_size = grid_size[:2] // self.train_cfg['out_size_factor']  # 使用div方式的出发来进行
         feature_map_size = torch.div(grid_size[:2], self.train_cfg['out_size_factor'], rounding_mode="trunc")
 
         # reorganize the gt_dict by tasks
