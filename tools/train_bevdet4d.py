@@ -27,7 +27,7 @@ def parse_args():
     parser.add_argument('config', help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
-        '--resume-from', default="",
+        '--resume-from', default="/home/cuidongdong/BEVDet/outputs_BEVDet_4d/bevdet4d-r50/epoch_2.pth",
         help='the checkpoint file to resume from, pretrain:/datasets/cdd_data/bevpretrainModel/bevdet-r50.pth'
              '/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_10.pth')
     parser.add_argument('--load_from',
