@@ -95,7 +95,7 @@ def parse_args():
                         help='Version of nuScenes dataset')
     parser.add_argument('--root_path',
                         type=str,
-                        default='./data/nuscenes',
+                        default='/data/cdd_data/nuScenes/',
                         help='Path to nuScenes dataset')
     parser.add_argument('--save_path',
                         type=str,
