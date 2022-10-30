@@ -259,13 +259,14 @@ data = dict(
               fix_direction=True, ))
 
 # Optimizer
-optimizer = dict(type='AdamW', lr=2e-4, weight_decay=0.01)
+# optimizer = dict(type='AdamW', lr=2e-4, weight_decay=0.01)
+optimizer = dict(type='AdamW', lr=2e-5, weight_decay=0.01)
 optimizer_config = dict(grad_clip=None)
 lr_config = dict(
     policy='step',
     warmup='linear',
     warmup_iters=500,
     warmup_ratio=0.001,
-    gamma=0.9,
-    step=[16, 22, 25, 27, 28, 29])
+    gamma=0.6,
+    step=[16, 22, 25, 26, 27, 28, 29, 30, 31])
 runner = dict(type='EpochBasedRunner', max_epochs=35)
