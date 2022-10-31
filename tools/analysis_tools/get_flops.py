@@ -107,3 +107,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    construct_input([256, 704])
