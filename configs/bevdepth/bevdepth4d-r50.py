@@ -140,7 +140,7 @@ model = dict(
 
 # Data
 dataset_type = 'NuScenesDataset'
-data_root = '/datasets/cdd_data/nuScenes/'
+data_root = '/data/cdd_data/nuScenes/'
 file_client_args = dict(backend='disk')
 
 train_pipeline = [
