@@ -31,7 +31,7 @@ def parse_args():
         default="",
         help='the checkpoint file to resume from, pretrain:/datasets/cdd_data/bevpretrainModel/bevdet-r50.pth')
     parser.add_argument('--load_from',
-                        default="",
+                        default=None,
                         help='laod checkpoints from saved models')
     parser.add_argument(
         '--no-validate',
