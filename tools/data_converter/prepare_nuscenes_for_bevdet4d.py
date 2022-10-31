@@ -12,9 +12,9 @@ def add_adj_info():
     interval = 3
     max_adj = 60
     for set in ['train', 'val']:
-        dataset = pickle.load(open('/datasets/cdd_data/nuScenes/nuscenes_infos_%s.pkl' % set, 'rb'))
+        dataset = pickle.load(open('/data/cdd_data/nuScenes/nuscenes_infos_%s.pkl' % set, 'rb'))
         nuscenes_version = 'v1.0-trainval'
-        dataroot = '/datasets/cdd_data/nuScenes/'
+        dataroot = '/data/cdd_data/nuScenes/'
         nuscenes = NuScenes(nuscenes_version, dataroot)
         map_token_to_id = dict()
         for id in range(len(dataset['infos'])):
