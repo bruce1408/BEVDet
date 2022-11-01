@@ -23,8 +23,8 @@ from mmseg import __version__ as mmseg_version
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
-    parser.add_argument('config', help='train config file path')
-    # parser.add_argument('--config', default="../configs/bevdet/bevdet_mobilenetv2_inception.py", help='train config file path')
+    # parser.add_argument('config', help='train config file path')
+    parser.add_argument('--config', default="../configs/bevdet/bevdet_mobilenetv2_inception.py", help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume-from',
@@ -44,6 +44,7 @@ def parse_args():
     group_gpus.add_argument(
         '--gpus',
         type=int,
+        default=1,
         help='number of gpus to use '
         '(only applicable to non-distributed training)')
     group_gpus.add_argument(
@@ -123,7 +124,7 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
-        cfg.work_dir = osp.join('./outputs_mobilenetv2_6', osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./outputs_mobilenetv2_anayls', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
     if args.load_from is not None:

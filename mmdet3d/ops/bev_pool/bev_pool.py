@@ -19,6 +19,7 @@ class QuickCumsum(torch.autograd.Function):
         ctx.save_for_backward(kept)
 
         # no gradient for geom_feats
+
         ctx.mark_non_differentiable(geom_feats)
 
         return x, geom_feats

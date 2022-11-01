@@ -57,3 +57,6 @@ class ResNetForBEVDet(nn.Module):
             if lid in self.backbone_output_ids:
                 feats.append(x_tmp)
         return feats
+
+# if __name__ == "__main__":
+    # torch.randn()
