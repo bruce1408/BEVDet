@@ -28,11 +28,11 @@ def parse_args():
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume-from',
-        default="",
+        default="/home/cuidongdong/BEVDet/outputs_BEVDet_4d/bevdepth-r50/epoch_16.pth",
         help='the checkpoint file to resume from, pretrain:/datasets/cdd_data/bevpretrainModel/bevdet-r50.pth')
     parser.add_argument('--load_from',
-                        default="",
-                        help='laod checkpoints from saved models')
+                        default=None,
+                        help='load checkpoints from saved models')
     parser.add_argument(
         '--no-validate',
         action='store_true',
@@ -117,7 +117,7 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None 修改模型输出的地址
-        cfg.work_dir = osp.join('./outputs_BEVDet_4d', osp.splitext(osp.basename(args.config))[0])
+        cfg.work_dir = osp.join('./outputs_BEVDepth', osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
     if args.load_from is not None:
