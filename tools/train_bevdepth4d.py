@@ -28,7 +28,7 @@ def parse_args():
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume-from',
-        default="/home/cuidongdong/BEVDet/outputs_BEVDepth_4d/bevdepth4d-r50/epoch_13.pth",
+        default="/home/cuidongdong/BEVDet/outputs_BEVDepth_4d/bevdepth4d-r50/epoch_22.pth",
         help='the checkpoint file to resume from, pretrain:/datasets/cdd_data/bevpretrainModel/bevdet-r50.pth')
     parser.add_argument('--load_from',
                         default=None,
