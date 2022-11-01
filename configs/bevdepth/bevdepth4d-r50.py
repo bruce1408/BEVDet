@@ -272,7 +272,7 @@ data = dict(
               fix_direction=True, ))
 
 # Optimizer
-optimizer = dict(type='AdamW', lr=2e-4, weight_decay=0.01)
+optimizer = dict(type='AdamW', lr=2e-5, weight_decay=0.01)
 optimizer_config = dict(grad_clip=None)
 lr_config = dict(
     policy='step',
