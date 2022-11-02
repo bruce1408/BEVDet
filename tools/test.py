@@ -20,9 +20,11 @@ from mmdet.datasets import replace_ImageToTensor
 def parse_args():
     parser = argparse.ArgumentParser(
         description='MMDet test (and eval) a model')
-    parser.add_argument('--config', default="/home/cuidongdong/BEVDet/configs/bevdet/bevdet-r50.py",
+    parser.add_argument('config',
+                        # default="/home/cuidongdong/BEVDet/configs/bevdet/bevdet-r50.py",
                         help='test config file path')
-    parser.add_argument('--checkpoint', default="/home/cuidongdong/BEVDet/outputs/bevdet-r50/epoch_24.pth",
+    parser.add_argument('checkpoint',
+                        default="",
                         help='checkpoint file')
     parser.add_argument('--out', help='output result file in pickle format')
     parser.add_argument(
