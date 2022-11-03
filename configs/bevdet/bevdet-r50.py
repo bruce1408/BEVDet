@@ -275,7 +275,7 @@ class_names = [
     'motorcycle', 'bicycle', 'pedestrian', 'traffic_cone'
 ]
 
-data_config={
+data_config = {
     'cams': ['CAM_FRONT_LEFT', 'CAM_FRONT', 'CAM_FRONT_RIGHT',
              'CAM_BACK_LEFT', 'CAM_BACK', 'CAM_BACK_RIGHT'],
     'Ncams': 6,
@@ -287,19 +287,19 @@ data_config={
     'rot': (-5.4, 5.4),
     'flip': True,
     'crop_h': (0.0, 0.0),
-    'resize_test':0.04,
+    'resize_test': 0.04,
 }
 
 # Model
-grid_config={
-        'xbound': [-51.2, 51.2, 0.8],
-        'ybound': [-51.2, 51.2, 0.8],
-        'zbound': [-10.0, 10.0, 20.0],
-        'dbound': [1.0, 60.0, 1.0],}
+grid_config = {
+    'xbound': [-51.2, 51.2, 0.8],
+    'ybound': [-51.2, 51.2, 0.8],
+    'zbound': [-10.0, 10.0, 20.0],
+    'dbound': [1.0, 60.0, 1.0], }
 
 voxel_size = [0.1, 0.1, 0.2]
 
-numC_Trans=64
+numC_Trans = 64
 
 model = dict(
     type='BEVDet',
@@ -325,10 +325,10 @@ model = dict(
                               grid_config=grid_config,
                               data_config=data_config,
                               numC_Trans=numC_Trans),
-    img_bev_encoder_backbone = dict(type='ResNetForBEVDet', numC_input=numC_Trans),
-    img_bev_encoder_neck = dict(type='FPN_LSS',
-                                in_channels=numC_Trans*8+numC_Trans*2,
-                                out_channels=256),
+    img_bev_encoder_backbone=dict(type='ResNetForBEVDet', numC_input=numC_Trans),
+    img_bev_encoder_neck=dict(type='FPN_LSS',
+                              in_channels=numC_Trans * 8 + numC_Trans * 2,
+                              out_channels=256),
     pts_bbox_head=dict(
         type='CenterHead',
         in_channels=256,
@@ -390,12 +390,10 @@ model = dict(
             nms_rescale_factor=[1.0, [0.7, 0.7], [0.4, 0.55], 1.1, [1.0, 1.0], [4.5, 9.0]]
         )))
 
-
 # Data
 dataset_type = 'NuScenesDataset'
 data_root = '/datasets/cdd_data/nuScenes/'
 file_client_args = dict(backend='disk')
-
 
 train_pipeline = [
     dict(type='LoadMultiViewImageFromFiles_BEVDet', is_train=True, data_config=data_config),
@@ -424,12 +422,12 @@ train_pipeline = [
     dict(type='DefaultFormatBundle3D', class_names=class_names),
     dict(type='Collect3D', keys=['img_inputs', 'gt_bboxes_3d', 'gt_labels_3d'],
          meta_keys=('filename', 'ori_shape', 'img_shape', 'lidar2img',
-                            'depth2img', 'cam2img', 'pad_shape',
-                            'scale_factor', 'flip', 'pcd_horizontal_flip',
-                            'pcd_vertical_flip', 'box_mode_3d', 'box_type_3d',
-                            'img_norm_cfg', 'pcd_trans', 'sample_idx',
-                            'pcd_scale_factor', 'pcd_rotation', 'pts_filename',
-                            'transformation_3d_flow', 'img_info'))
+                    'depth2img', 'cam2img', 'pad_shape',
+                    'scale_factor', 'flip', 'pcd_horizontal_flip',
+                    'pcd_vertical_flip', 'box_mode_3d', 'box_type_3d',
+                    'img_norm_cfg', 'pcd_trans', 'sample_idx',
+                    'pcd_scale_factor', 'pcd_rotation', 'pts_filename',
+                    'transformation_3d_flow', 'img_info'))
 ]
 
 test_pipeline = [
@@ -451,7 +449,7 @@ test_pipeline = [
                 type='DefaultFormatBundle3D',
                 class_names=class_names,
                 with_label=False),
-            dict(type='Collect3D', keys=['points','img_inputs'])
+            dict(type='Collect3D', keys=['points', 'img_inputs'])
         ])
 ]
 # construct a pipeline for data and gt loading in show function
@@ -491,9 +489,9 @@ data = dict(
             box_type_3d='LiDAR',
             img_info_prototype='bevdet')),
     val=dict(pipeline=test_pipeline, classes=class_names,
-        modality=input_modality, img_info_prototype='bevdet'),
+             modality=input_modality, img_info_prototype='bevdet'),
     test=dict(pipeline=test_pipeline, classes=class_names,
-        modality=input_modality, img_info_prototype='bevdet'))
+              modality=input_modality, img_info_prototype='bevdet'))
 
 # Optimizer
 optimizer = dict(type='AdamW', lr=2e-4, weight_decay=0.01)

@@ -40,18 +40,19 @@ def parse_args():
     return args
 
 
-def construct_input(input_shape):
+def construct_input(input_shape, depth=True):
     rot = torch.eye(3).float().cuda().view(1, 3, 3)
     rot = torch.cat([rot for _ in range(6)], axis=0).view(1, 6, 3, 3)
 
     input = dict(img_inputs=[
-        torch.ones(()).new_empty(
-            (1, 6, 3, *input_shape)).cuda(),
+        torch.ones(()).new_empty((1, 6, 3, *input_shape)).cuda(),
         rot,
         torch.ones((1, 6, 3)).cuda(),
         rot,
         rot,
-        torch.ones((1, 6, 3)).cuda()])
+        torch.ones((1, 6, 3)).cuda()
+        # torch.ones((1, 6, 128, 128)).cuda()
+    ])
     return input
 
 
