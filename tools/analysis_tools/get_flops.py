@@ -13,12 +13,14 @@ except ImportError:
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
-    parser.add_argument('config', help='train config file path')
+    parser.add_argument('--config', default="/home/cuidongdong/BEVDet/configs/bevdepth/bevdepth4d-r50.py",
+                        help='train config file path')
     parser.add_argument(
         '--shape',
         type=int,
         nargs='+',
-        default=[40000, 4],
+        # default=[40000, 4],
+        default=[256, 704],
         help='input point cloud size')
     parser.add_argument(
         '--modality',
@@ -44,15 +46,27 @@ def construct_input(input_shape, depth=True):
     rot = torch.eye(3).float().cuda().view(1, 3, 3)
     rot = torch.cat([rot for _ in range(6)], axis=0).view(1, 6, 3, 3)
 
+    # input = dict(img_inputs=[
+    #     torch.ones(()).new_empty((1, 6, 3, *input_shape)).cuda(),
+    #     rot,
+    #     torch.ones((1, 6, 3)).cuda(),
+    #     rot,
+    #     rot,
+    #     torch.ones((1, 6, 3)).cuda()
+    #     # torch.ones((1, 6, 128, 128)).cuda()
+    # ])
+
+    # rot = torch.eye(3).float().cuda().view(1, 3, 3)
+    # rot = torch.cat([rot for _ in range(6)], axis=0).view(1, 6, 3, 3)
     input = dict(img_inputs=[
-        torch.ones(()).new_empty((1, 6, 3, *input_shape)).cuda(),
+        torch.ones(()).new_empty(
+            (1, 6, 3, *input_shape)).cuda(),
         rot,
         torch.ones((1, 6, 3)).cuda(),
         rot,
         rot,
-        torch.ones((1, 6, 3)).cuda()
-        # torch.ones((1, 6, 128, 128)).cuda()
-    ])
+        torch.ones((1, 6, 3)).cuda(), None])
+
     return input
 
 
@@ -89,6 +103,7 @@ def main():
     if torch.cuda.is_available():
         model.cuda()
     model.eval()
+    print("model eval is over")
 
     if hasattr(model, 'forward_dummy'):
         model.forward = model.forward_dummy
@@ -97,6 +112,7 @@ def main():
             'FLOPs counter is currently not supported for {}'.format(
                 model.__class__.__name__))
 
+    print("before get flops")
     flops, params = get_model_complexity_info(model, input_shape, input_constructor=construct_input)
     split_line = '=' * 30
     print(f'{split_line}\nInput shape: {input_shape}\n'
@@ -104,8 +120,16 @@ def main():
     print('!!!Please be cautious if you use the results in papers. '
           'You may need to check if all ops are supported and verify that the '
           'flops computation is correct.')
+    print()
 
 
 if __name__ == '__main__':
     main()
-    construct_input([256, 704])
+    # result = construct_input([256, 704])
+
+
+
+
+
+
+
