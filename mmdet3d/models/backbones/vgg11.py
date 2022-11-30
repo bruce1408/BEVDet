@@ -7,6 +7,7 @@ https://arxiv.org/abs/1409.1556v6
 import torch
 import torch.nn as nn
 from torchsummary import summary
+from mmdet.models import BACKBONES
 
 cfg = {
     'vgg11': [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
@@ -16,6 +17,7 @@ cfg = {
 }
 
 
+# @BACKBONES.register_module()
 class VGG(nn.Module):
 
     def __init__(self, features, num_class=100):

@@ -9,9 +9,10 @@ from .resnet import ResNetForBEVDet
 from .swin import SwinTransformer
 from .inception_tiny import InceptionForBEV  # 新加的inception网络
 # from torchvision.models.vgg import vgg11_bn
+from .repvgg import RepVGG
 
 __all__ = [
     'ResNet', 'ResNetV1d', 'ResNeXt', 'SSDVGG', 'HRNet', 'NoStemRegNet',
     'SECOND', 'PointNet2SASSG', 'PointNet2SAMSG', 'MultiBackbone',
-    'ResNetForBEVDet', 'SwinTransformer', 'InceptionForBEV'
+    'ResNetForBEVDet', 'SwinTransformer', 'InceptionForBEV', "RepVGG"
 ]
