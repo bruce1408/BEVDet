@@ -8,7 +8,7 @@ class_names = [
 ]
 dataset_type = 'NuScenesDataset'
 # data_root = '/datasets/cdd_data/nuScenes/'
-data_root = '/home/SharedDatasets/nuscenes'
+data_root = '/home/SharedDatasets/nuscenes/'
 
 # Input modality for nuScenes dataset, this is consistent with the submission
 # format which requires the information in input_modality.
