@@ -189,7 +189,8 @@ parser.add_argument('--dataset', type=str, default='nuscenes', help='name of the
 parser.add_argument(
     '--root-path',
     type=str,
-    default='/datasets/cdd_data/nuScenes',
+    # default='/datasets/cdd_data/nuScenes',
+    default='/home/SharedDatasets/nuscenes',
     help='specify the root path of dataset')
 parser.add_argument(
     '--version',
@@ -206,10 +207,12 @@ parser.add_argument(
 parser.add_argument(
     '--out-dir',
     type=str,
-    default='/datasets/cdd_data/nuScenes',
+    # default='/datasets/cdd_data/nuScenes',
+    default="/home/SharedDatasets/nuscenes",
     required=False,
     help='name of info pkl')
-parser.add_argument('--extra-tag', type=str, default='nuscenes')
+parser.add_argument('--extra-tag', type=str, default='nuscenes_cdd', 
+                    help="数据添加后缀,默认是nuscenes,生成数据nuscenes_train_info.pkl")
 parser.add_argument(
     '--workers', type=int, default=4, help='number of threads to be used')
 args = parser.parse_args()
