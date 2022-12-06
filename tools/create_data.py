@@ -196,7 +196,7 @@ parser.add_argument(
     '--version',
     type=str,
     # default='v1.0-mini',  # 先改成mini形式的数据集进行测试
-    default='v1.0',  # 先改成mini形式的数据集进行测试
+    default='v1.0',  #
     required=False,
     help='specify the dataset version, no need for kitti')
 parser.add_argument(
