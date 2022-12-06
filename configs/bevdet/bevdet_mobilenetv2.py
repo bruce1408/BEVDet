@@ -44,7 +44,7 @@ numC_Trans = 64
 model = dict(
     type='BEVDet',
     img_backbone=dict(
-        pretrained='/datasets/cdd_data/mobilenet_v2_batch256_imagenet-ff34753d.pth',
+        pretrained='/home/cuidongdong/pretrained_model/mobilenet_v2_batch256_imagenet-ff34753d.pth',
         type='MobileNetV2',
         act_cfg=dict(type='LeakyReLU', negative_slope=0.1),
         # act_cfg=dict(type='Swish'),
@@ -136,7 +136,7 @@ model = dict(
 # print(model.get("test_cfg"))
 # Data
 dataset_type = 'NuScenesDataset'
-data_root = '/datasets/cdd_data/nuScenes/'
+data_root = '/home/SharedDatasets/nuscenes/'
 file_client_args = dict(backend='disk')
 
 train_pipeline = [
