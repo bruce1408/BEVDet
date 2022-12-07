@@ -216,7 +216,7 @@ input_modality = dict(
     use_external=False)
 
 data = dict(
-    samples_per_gpu=8,  # 这里为了快速收敛，设置为6
+    samples_per_gpu=4,  # 这里为了快速收敛，设置为6
     workers_per_gpu=4,
     train=dict(
         type='CBGSDataset',
