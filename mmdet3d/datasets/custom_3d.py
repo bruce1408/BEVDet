@@ -61,7 +61,7 @@ class Custom3DDataset(Dataset):
 
         self.CLASSES = self.get_classes(classes)
         self.cat2id = {name: i for i, name in enumerate(self.CLASSES)}
-        print("==============", self.ann_file)
+        # print("==============", self.ann_file)
         self.data_infos = self.load_annotations(self.ann_file)
 
         if pipeline is not None:
@@ -356,6 +356,7 @@ class Custom3DDataset(Dataset):
             return self.prepare_test_data(idx)
         while True:
             data = self.prepare_train_data(idx)
+            # print("="*100, data)
             if data is None:
                 idx = self._rand_another(idx)
                 continue

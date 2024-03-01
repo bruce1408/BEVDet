@@ -625,4 +625,4 @@ def generate_record(ann_rec: dict, x1: float, y1: float, x2: float, y2: float,
 
 
 if __name__ == "__main__":
-    create_nuscenes_infos("/data/cdd_data/nuScenes")
+    create_nuscenes_infos("/mnt/share_disk/cdd/nuScenes/", "cdd", "v1.0-mini")

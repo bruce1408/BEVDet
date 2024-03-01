@@ -190,7 +190,7 @@ parser.add_argument(
     '--root-path',
     type=str,
     # default='/datasets/cdd_data/nuScenes',
-    default='/home/SharedDatasets/nuscenes',
+    default='/mnt/share_disk/cdd/nuScenes/',
     help='specify the root path of dataset')
 parser.add_argument(
     '--version',
@@ -209,7 +209,7 @@ parser.add_argument(
     '--out-dir',
     type=str,
     # default='/datasets/cdd_data/nuScenes',
-    default="/home/SharedDatasets/nuscenes",
+    default="/mnt/share_disk/cdd/nuScenes",
     required=False,
     help='name of info pkl')
 parser.add_argument('--extra-tag', type=str, default='nuscenes_cdd', 

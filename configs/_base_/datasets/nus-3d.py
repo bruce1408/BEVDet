@@ -8,7 +8,7 @@ class_names = [
 ]
 dataset_type = 'NuScenesDataset'
 # data_root = '/datasets/cdd_data/nuScenes/'
-data_root = '/home/SharedDatasets/nuscenes/'
+data_root = '/mnt/share_disk/cdd/nuScenes/'
 
 # Input modality for nuScenes dataset, this is consistent with the submission
 # format which requires the information in input_modality.
@@ -122,7 +122,7 @@ data = dict(
     val=dict(
         type=dataset_type,
         data_root=data_root,
-        ann_file=data_root + 'nuscenes_cdd_infos_val.pkl',
+        ann_file=data_root + 'cdd_infos_val.pkl',
         pipeline=test_pipeline,
         classes=class_names,
         modality=input_modality,
@@ -131,7 +131,7 @@ data = dict(
     test=dict(
         type=dataset_type,
         data_root=data_root,
-        ann_file=data_root + 'nuscenes_cdd_infos_val.pkl',
+        ann_file=data_root + 'cdd_infos_val.pkl',
         pipeline=test_pipeline,
         classes=class_names,
         modality=input_modality,
